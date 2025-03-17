@@ -1,6 +1,7 @@
 # The Chatty Python Experiment
 
-This experimental project is a Python programming chatbot built as a **Retrieval-Augmented Generation (RAG) model**. It assists users by delivering context-aware answers and code examples using advanced prompt engineering and efficient retrieval techniques.
+This experimental project is a Python programming chatbot built as a **Retrieval-Augmented Generation (RAG) model**. It assists users by delivering context-aware answers and code examples using advanced prompt engineering and efficient retrieval techniques. Try the Chatty Python here:
+https://chattypython.streamlit.app/
 
 ## Overview
 
