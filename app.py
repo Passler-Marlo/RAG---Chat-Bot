@@ -31,7 +31,7 @@ if st.sidebar.button("Clear Chat History"):
 
 # ---------- LLM Setup ----------
 hf_model = "mistralai/Mistral-7B-Instruct-v0.3"
-os.environ("HUGGING_TOKEN") = st.secrets("HUGGING_TOKEN")
+os.environ["HUGGING_TOKEN"] = st.secrets["HUGGING_TOKEN"]
 
 hf_token = os.environ("HUGGING_TOKEN")
 
