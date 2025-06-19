@@ -1,3 +1,4 @@
+11gdeo-codex/implement-meta-s-large-concept-models-as-planner
 """Simple discourse plan realiser.
 
 This module demonstrates how a small sequence-to-sequence model can be used
@@ -42,10 +43,17 @@ def _load_model(model_name: str, *, local_files_only: bool = False) -> Tuple["Au
     mod = AutoModelForSeq2SeqLM.from_pretrained(model_name, local_files_only=local_files_only)
     return tok, mod
 
+import json
+from dataclasses import dataclass, asdict
+from typing import List
+
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+
 
 
 @dataclass
 class Step:
+11gdeo-codex/implement-meta-s-large-concept-models-as-planner
     """A single clause in the discourse plan."""
 
     role: str
@@ -54,13 +62,16 @@ class Step:
 
 @dataclass
 class Plan:
+11gdeo-codex/implement-meta-s-large-concept-models-as-planner
     """Complete discourse plan to be realised."""
+
 
     dialogue_act: str
     topic: str
     steps: List[Step]
 
 
+11gdeo-codex/implement-meta-s-large-concept-models-as-planner
 def plan_to_text(
     plan: Plan,
     model_name: str = "google/flan-t5-small",
@@ -82,6 +93,12 @@ def plan_to_text(
 
     tokenizer, model = _load_model(model_name, local_files_only=local_files_only)
 
+def plan_to_text(plan: Plan, model_name: str = "google/flan-t5-small") -> str:
+    """Convert a discourse plan into fluent text using a small seq2seq model."""
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+
     # JSON dump to maintain a stable format
     plan_json = json.dumps(asdict(plan), ensure_ascii=False)
     prompt = f"Realise the following plan into a short paragraph:\n{plan_json}"
@@ -90,10 +107,14 @@ def plan_to_text(
     outputs = model.generate(**inputs, max_new_tokens=120)
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-
+11gdeo-codex/implement-meta-s-large-concept-models-as-planner
 def _default_plan() -> Plan:
     """Return the example plan used in the README."""
     return Plan(
+
+if __name__ == "__main__":
+    example_plan = Plan(
+
         dialogue_act="Inform",
         topic="Madonna",
         steps=[
@@ -103,6 +124,7 @@ def _default_plan() -> Plan:
             Step(role="wrap_up", text="Her influence on pop culture is widely recognised."),
         ],
     )
+11gdeo-codex/implement-meta-s-large-concept-models-as-planner
 
 
 def main() -> None:
@@ -117,3 +139,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+    print(plan_to_text(example_plan))
